@@ -1,0 +1,14 @@
+{
+    "model": "EfficientNet-B0",
+    "dataset": "RealWaste",
+    "test_images": 713,
+    "number_of_classes": 9,
+    "checkpoint_epoch": 18,
+    "best_validation_accuracy": 0.9396914446002805,
+    "test_accuracy": 0.9158485273492286,
+    "macro_precision": 0.9220928562702126,
+    "macro_recall": 0.9273270109030126,
+    "macro_f1_score": 0.923868794213472,
+    "weighted_f1_score": 0.9160719435703926,
+    "device": "cuda"
+}

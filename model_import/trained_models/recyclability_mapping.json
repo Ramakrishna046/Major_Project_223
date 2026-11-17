@@ -1,0 +1,11 @@
+{
+    "Cardboard": "Recyclable",
+    "Food Organics": "Non-recyclable",
+    "Glass": "Recyclable",
+    "Metal": "Recyclable",
+    "Miscellaneous Trash": "Non-recyclable",
+    "Paper": "Recyclable",
+    "Plastic": "Recyclable",
+    "Textile Trash": "Non-recyclable",
+    "Vegetation": "Non-recyclable"
+}
