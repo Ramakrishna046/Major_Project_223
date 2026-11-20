@@ -1,4 +1,3 @@
-
 import csv
 import json
 from pathlib import Path
@@ -6,13 +5,12 @@ from pathlib import Path
 from core.config import OUTPUT_DIR
 
 
-def generate_reports(results):
-    OUTPUT_DIR.mkdir(parents=True, exist_ok=True)
+def generate_reports(results, output_dir=None):
+    report_dir = Path(output_dir) if output_dir else OUTPUT_DIR
+    report_dir.mkdir(parents=True, exist_ok=True)
 
     objects = results["objects"]
-
-    # Generate CSV report
-    csv_path = OUTPUT_DIR / "waste_detection_report.csv"
+    csv_path = report_dir / "waste_detection_report.csv"
 
     csv_columns = [
         "object_id",
@@ -27,26 +25,18 @@ def generate_reports(results):
         writer.writeheader()
         writer.writerows(objects)
 
-    # Calculate category counts
     category_counts = {}
-
     for obj in objects:
         category = obj["category"]
-        category_counts[category] = (
-            category_counts.get(category, 0) + 1
-        )
+        category_counts[category] = category_counts.get(category, 0) + 1
 
     recyclable_count = sum(
-        1 for obj in objects
-        if obj["recyclability"] == "Recyclable"
+        1 for obj in objects if obj["recyclability"] == "Recyclable"
     )
-
     non_recyclable_count = sum(
-        1 for obj in objects
-        if obj["recyclability"] == "Non-recyclable"
+        1 for obj in objects if obj["recyclability"] == "Non-recyclable"
     )
 
-    # Generate JSON report
     summary = {
         "total_unique_objects": results["total_objects"],
         "classified_objects": results["classified_objects"],
@@ -57,8 +47,7 @@ def generate_reports(results):
         "objects": objects,
     }
 
-    json_path = OUTPUT_DIR / "waste_detection_summary.json"
-
+    json_path = report_dir / "waste_detection_summary.json"
     with open(json_path, "w", encoding="utf-8") as file:
         json.dump(summary, file, indent=4)
 
