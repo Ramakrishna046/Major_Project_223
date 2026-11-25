@@ -9,8 +9,8 @@ OUTPUT_DIR = BASE_DIR / "outputs"
 REPORT_DIR = BASE_DIR / "reports"
 
 # Trained model paths
-DETECTION_MODEL = MODEL_DIR / "yolov8s_best.pt"
-CLASSIFICATION_MODEL = MODEL_DIR / "efficientnet_b0_best.pth"
+DETECTION_MODEL = MODEL_DIR / "YOLO26s_pLitterStreet" / "best.pt"
+CLASSIFICATION_MODEL = MODEL_DIR / "efficientnet_b0_12class_finetuned.pth"
 
 # Supporting configuration files
 CLASS_NAMES_FILE = MODEL_DIR / "class_names.json"

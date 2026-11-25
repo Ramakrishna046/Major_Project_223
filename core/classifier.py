@@ -1,9 +1,8 @@
 
 import json
 import torch
-import timm
 from PIL import Image
-from torchvision import transforms
+from torchvision import models, transforms
 
 from core.config import (
     CLASSIFICATION_MODEL,
@@ -14,6 +13,7 @@ from core.config import (
 
 
 class WasteClassifier:
+
     def __init__(self):
         self.device = torch.device(DEVICE)
 
@@ -23,11 +23,12 @@ class WasteClassifier:
         with open(RECYCLABILITY_FILE, "r", encoding="utf-8") as file:
             self.recyclability_mapping = json.load(file)
 
-        # Recreate the trained EfficientNet-B0 architecture
-        self.model = timm.create_model(
-            "efficientnet_b0",
-            pretrained=False,
-            num_classes=len(self.class_names),
+        # Recreate the trained torchvision EfficientNet-B0 architecture
+        self.model = models.efficientnet_b0(weights=None)
+
+        self.model.classifier[1] = torch.nn.Linear(
+            self.model.classifier[1].in_features,
+            len(self.class_names),
         )
 
         checkpoint = torch.load(
@@ -36,44 +37,46 @@ class WasteClassifier:
             weights_only=True,
         )
 
-        # Support both direct state dictionaries and wrapped checkpoints
-        if "state_dict" in checkpoint:
-            checkpoint = checkpoint["state_dict"]
-        elif "model_state_dict" in checkpoint:
-            checkpoint = checkpoint["model_state_dict"]
+        # Load the trained model weights
+        if "model_state_dict" in checkpoint:
+            state_dict = checkpoint["model_state_dict"]
+        else:
+            state_dict = checkpoint
 
         # Remove DataParallel prefixes if present
-        checkpoint = {
+        state_dict = {
             key.replace("module.", "", 1): value
-            for key, value in checkpoint.items()
+            for key, value in state_dict.items()
         }
 
-        self.model.load_state_dict(checkpoint)
+        self.model.load_state_dict(state_dict)
         self.model.to(self.device)
         self.model.eval()
 
+        # Match the training/validation preprocessing
         self.transform = transforms.Compose([
-            transforms.Resize((224, 224)),
+            transforms.Resize(256),
+            transforms.CenterCrop(224),
             transforms.ToTensor(),
             transforms.Normalize(
-                mean=(0.485, 0.456, 0.406),
-                std=(0.229, 0.224, 0.225),
+                mean=[0.485, 0.456, 0.406],
+                std=[0.229, 0.224, 0.225],
             ),
         ])
 
     def classify(self, image):
         """
-        image: OpenCV BGR image or PIL image
+        Accepts an OpenCV BGR image or a PIL image.
         """
+
         if image is None:
             raise ValueError("Input image is empty.")
 
         if not isinstance(image, Image.Image):
-            image = Image.fromarray(
-                image[:, :, ::-1]
-            )
+            image = Image.fromarray(image[:, :, ::-1])
 
         image = image.convert("RGB")
+
         tensor = self.transform(image).unsqueeze(0)
         tensor = tensor.to(self.device)
 

@@ -1,11 +1,14 @@
 {
-    "Cardboard": "Recyclable",
-    "Food Organics": "Non-recyclable",
-    "Glass": "Recyclable",
-    "Metal": "Recyclable",
-    "Miscellaneous Trash": "Non-recyclable",
-    "Paper": "Recyclable",
-    "Plastic": "Recyclable",
-    "Textile Trash": "Non-recyclable",
-    "Vegetation": "Non-recyclable"
+    "battery": "Non-recyclable",
+    "biological": "Non-recyclable",
+    "brown-glass": "Recyclable",
+    "cardboard": "Recyclable",
+    "clothes": "Reusable",
+    "green-glass": "Recyclable",
+    "metal": "Recyclable",
+    "paper": "Recyclable",
+    "plastic": "Recyclable",
+    "shoes": "Reusable",
+    "trash": "Non-recyclable",
+    "white-glass": "Recyclable"
 }

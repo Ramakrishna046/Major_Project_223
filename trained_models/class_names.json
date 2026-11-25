@@ -1,11 +1,14 @@
 [
-    "Cardboard",
-    "Food Organics",
-    "Glass",
-    "Metal",
-    "Miscellaneous Trash",
-    "Paper",
-    "Plastic",
-    "Textile Trash",
-    "Vegetation"
+    "battery",
+    "biological",
+    "brown-glass",
+    "cardboard",
+    "clothes",
+    "green-glass",
+    "metal",
+    "paper",
+    "plastic",
+    "shoes",
+    "trash",
+    "white-glass"
 ]

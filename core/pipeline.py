@@ -72,6 +72,14 @@ class WasteProcessingPipeline:
 
                 for detection in detections:
                     x1, y1, x2, y2 = detection["bbox"]
+                    track_id = detection.get("track_id")
+                    track_info = None
+                    if track_id is not None:
+                        track_info = tracked_by_id.get(int(track_id))
+                    is_confirmed = (
+                        track_info is not None
+                        and track_info.get("confirmed", False)
+                    )
                     x1 = max(0, min(width, int(x1)))
                     y1 = max(0, min(height, int(y1)))
                     x2 = max(0, min(width, int(x2)))
@@ -86,7 +94,7 @@ class WasteProcessingPipeline:
                         # screen exposes frame-level classification changes.
                         classification = self.classifier.classify(crop)
 
-                    if track_id is not None and classification is not None:
+                    if (track_id is not None and is_confirmed and classification is not None):
                         track_id = int(track_id)
                         if track_id not in object_records:
                             object_records[track_id] = {
