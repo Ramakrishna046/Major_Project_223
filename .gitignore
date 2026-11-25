@@ -10,3 +10,5 @@ __pycache__/
 datasets/
 runs/
 outputs/
+!trained_models/YOLO26s_pLitterStreet/best.pt
+!trained_models/YOLO26s_pLitterStreet/last.ptSS

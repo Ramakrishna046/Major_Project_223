@@ -1,5 +1,5 @@
 from ultralytics import YOLO
-
+from pathlib import Path
 from core.config import (
     DETECTION_MODEL,
     DEVICE,
@@ -21,7 +21,7 @@ class WasteDetector:
         results = self.model.track(
             source=frame,
             persist=True,
-            tracker="bytetrack.yaml",
+            tracker=str(Path(__file__).resolve().parent / "bytetrack_waste.yaml"),
             conf=CONFIDENCE_THRESHOLD,
             imgsz=IMAGE_SIZE,
             device=DEVICE,
